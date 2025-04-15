@@ -5,7 +5,10 @@ use yonris::pala8::display_engine::window_conf;
 use yonris::pala8::graphic_engine::GraphicEngine;
 use yonris::pala8::vec2::Vec2;
 
+use yonris::drawers::PlayfieldDrawer;
 use yonris::playfield::Playfield;
+
+use yonris::constants::PLAYFIELD_BLOCK_PX;
 
 #[macroquad::main(window_conf)]
 async fn main() {
@@ -50,13 +53,14 @@ async fn main() {
     let coordinates8: Vec2 = Vec2::new(65.0, 128.0);
 
     let playfield: Playfield = Playfield::new();
+    let playfield_drawer: PlayfieldDrawer = PlayfieldDrawer::new(&playfield);
 
     loop {
         graphic_engine.draw_background(&red);
         graphic_engine.draw_rectangle(
-            &playfield.top_left_corner,
-            (playfield.height * playfield.block_size) as f32,
-            (playfield.width * playfield.block_size) as f32,
+            &playfield_drawer.top_left_pixel,
+            (playfield.height * PLAYFIELD_BLOCK_PX) as f32,
+            (playfield.width * PLAYFIELD_BLOCK_PX) as f32,
             &black,
         );
         graphic_engine.draw_pixel(&coordinates, &color);
