@@ -20,15 +20,17 @@ impl Piece {
         }
     }
 
-    pub fn move_left(&mut self) {
-        self.position.x -= 1;
+    pub fn proyection_left(&self) -> IVec2 {
+        IVec2::new(self.position.x - 1, self.position.y)
+    }
+    pub fn proyection_right(&self) -> IVec2 {
+        IVec2::new(self.position.x + 1, self.position.y)
+    }
+    pub fn proyection_down(&self) -> IVec2 {
+        IVec2::new(self.position.x, self.position.y + 1)
     }
 
-    pub fn move_right(&mut self) {
-        self.position.x += 1;
-    }
-
-    pub fn move_down(&mut self) {
-        self.position.y += 1;
+    pub fn set_position(&mut self, new_possition: IVec2) {
+        self.position = new_possition;
     }
 }

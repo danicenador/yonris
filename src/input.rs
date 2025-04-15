@@ -16,16 +16,16 @@ impl GameplayInput {
 
     pub fn apply_input(&self, playfield: &mut Playfield){
         if self.input_engine.h_key_pressed() {
-            playfield.piece.move_left();
+            playfield.move_piece_left();
         }
         if self.input_engine.j_key_pressed() {
-            playfield.piece.move_down();
+            playfield.move_piece_down();
         }
         // if self.input_engine.k_key_pressed() {
         //     playfield.piece.move_up();
         // }
         if self.input_engine.l_key_pressed() {
-            playfield.piece.move_right();
+            playfield.move_piece_right();
         }
     }
 
