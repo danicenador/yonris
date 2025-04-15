@@ -2,35 +2,19 @@ use crate::pala8::color::Color;
 use crate::pala8::constants::INITIAL_SCALING;
 use crate::pala8::display_engine;
 use crate::pala8::draw_engine;
-use crate::pala8::input_engine;
 use crate::pala8::vec2::Vec2;
 
 pub struct GraphicEngine {
     scale: f32,
     draw_engine: Box<dyn draw_engine::DrawEngineTrait>,
-    input_engine: Box<dyn input_engine::InputEngineTrait>,
 }
 
 impl GraphicEngine {
     pub fn new() -> Self {
         let drawer: draw_engine::DrawEngine = draw_engine::DrawEngine;
-        let input_engine: input_engine::InputEngine = input_engine::InputEngine;
         Self {
             scale: INITIAL_SCALING,
             draw_engine: Box::new(drawer),
-            input_engine: Box::new(input_engine),
-        }
-    }
-
-    pub fn read_input(&mut self) {
-        if self.input_engine.i_key_pressed() {
-            // self.increase_zoom();
-        }
-        if self.input_engine.o_key_pressed() {
-            // self.decrease_zoom();
-        }
-        if self.input_engine.r_key_pressed() {
-            // self.reset_zoom();
         }
     }
 

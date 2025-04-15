@@ -1,4 +1,4 @@
-use crate::playfield;
+use crate::playfield::Playfield;
 use crate::ivec2::IVec2;
 use crate::pala8::vec2::Vec2;
 use crate::pala8::display_engine::center_line;
@@ -9,14 +9,13 @@ use crate::constants::PLAYFIELD_BLOCK_PX;
 use crate::pala8::constants::{RESOLUTION_HEIGHT, RESOLUTION_WIDTH};
 
 
-pub struct PlayfieldDrawer<'a> {
-    pub playfield: &'a playfield::Playfield,
+pub struct PlayfieldDrawer {
     pub top_left_pixel: Vec2,
     color: Color,
 }
 
-impl<'a> PlayfieldDrawer<'a> {
-    pub fn new(playfield: &'a playfield::Playfield, color: Color) -> Self {
+impl PlayfieldDrawer {
+    pub fn new(playfield: &Playfield, color: Color) -> Self {
         let pixel_width: i32 = PLAYFIELD_BLOCK_PX * playfield.width;
         let pixel_height: i32 = PLAYFIELD_BLOCK_PX * playfield.height;
         let top_left_pixel: Vec2 = Vec2::new(
@@ -25,31 +24,30 @@ impl<'a> PlayfieldDrawer<'a> {
         );
 
         PlayfieldDrawer {
-            playfield,
             top_left_pixel,
             color,
         }
     }
 
-    pub fn draw(&self, graphic_engine: &GraphicEngine) {
-        self.draw_playfield_background(graphic_engine);
-        self.draw_piece(graphic_engine);
+    pub fn draw(&self, playfield: &Playfield, graphic_engine: &GraphicEngine) {
+        self.draw_playfield_background(playfield, graphic_engine);
+        self.draw_piece(playfield, graphic_engine);
     }
 
-    fn draw_playfield_background(&self, graphic_engine: &GraphicEngine){
+    fn draw_playfield_background(&self, playfield: &Playfield, graphic_engine: &GraphicEngine){
         graphic_engine.draw_rectangle(
             &self.top_left_pixel,
-            (self.playfield.height * PLAYFIELD_BLOCK_PX) as f32,
-            (self.playfield.width * PLAYFIELD_BLOCK_PX) as f32,
+            (playfield.height * PLAYFIELD_BLOCK_PX) as f32,
+            (playfield.width * PLAYFIELD_BLOCK_PX) as f32,
             &self.color,
         )
     }
 
-    fn draw_piece(&self, graphic_engine: &GraphicEngine) {
+    fn draw_piece(&self, playfield: &Playfield, graphic_engine: &GraphicEngine) {
         let block_px: i32 = PLAYFIELD_BLOCK_PX;
         let playfield_top_left_pixel: Vec2 = self.top_left_pixel;
         let piece_top_left_pixel: Vec2 = get_piece_top_left_pixel(
-            &self.playfield.piece.position,
+            &playfield.piece.position,
             block_px,
             &playfield_top_left_pixel
         );
@@ -58,7 +56,7 @@ impl<'a> PlayfieldDrawer<'a> {
             &piece_top_left_pixel,
             block_px as f32,
             block_px as f32,
-            &self.playfield.piece.color,
+            &playfield.piece.color,
         );
     }
 }

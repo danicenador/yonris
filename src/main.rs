@@ -6,6 +6,7 @@ use yonris::pala8::graphic_engine::GraphicEngine;
 use yonris::pala8::vec2::Vec2;
 
 use yonris::drawers::PlayfieldDrawer;
+use yonris::input::GameplayInput;
 use yonris::playfield::Playfield;
 
 use yonris::constants::PLAYFIELD_BLOCK_PX;
@@ -28,13 +29,15 @@ async fn main() {
         a: 1.0,
     };
 
-    let playfield: Playfield = Playfield::new();
+    let mut playfield: Playfield = Playfield::new();
     let playfield_drawer: PlayfieldDrawer = PlayfieldDrawer::new(&playfield, black);
+    let gameplay_input: GameplayInput = GameplayInput::new();
 
 
     loop {
+        gameplay_input.apply_input(&mut playfield);
         graphic_engine.draw_background(&red);
-        playfield_drawer.draw(&graphic_engine);
+        playfield_drawer.draw(&playfield, &graphic_engine);
         prelude::next_frame().await
     }
 }
