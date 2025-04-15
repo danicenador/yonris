@@ -1,7 +1,4 @@
-use crate::constants::{PLAYFIELD_BLOCK_PX, PLAYFIELD_HEIGHT, PLAYFIELD_WIDTH};
-use crate::pala8::constants::{RESOLUTION_HEIGHT, RESOLUTION_WIDTH};
-use crate::pala8::display_engine::center_line;
-use crate::pala8::vec2::Vec2;
+use crate::constants::{PLAYFIELD_HEIGHT, PLAYFIELD_WIDTH};
 
 pub struct Playfield {
     pub width: i32,

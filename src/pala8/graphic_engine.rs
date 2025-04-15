@@ -60,4 +60,8 @@ impl GraphicEngine {
         self.draw_engine
             .draw_rectangle(&display_top_left, display_width, display_height, &color);
     }
+
+    pub fn set_scale(&mut self, scale: f32) {
+        self.scale = scale;
+    }
 }

@@ -19,5 +19,5 @@ pub fn resolution_transform(coordinate: f32, scale: &f32) -> f32 {
 
 pub fn center_line(longitude: i32, available_distance: i32) -> f32 {
     let starting_point = (available_distance as f32 / 2.0) - (longitude as f32 / 2.0);
-    starting_point
+    starting_point + 1.0
 }

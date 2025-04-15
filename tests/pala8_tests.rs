@@ -13,5 +13,13 @@ fn test_center_line() {
     let longitude: i32 = 10;
     let available_distance: i32 = 128;
     let starting_point: f32 = display_engine::center_line(longitude, available_distance);
-    assert_eq!(starting_point, 59.0);
+    assert_eq!(starting_point, 60.0);
+}
+
+#[test]
+fn test_center_line2() {
+    let longitude: i32 = 20*6;
+    let available_distance: i32 = 128;
+    let starting_point: f32 = display_engine::center_line(longitude, available_distance);
+    assert_eq!(starting_point, 5.0);
 }

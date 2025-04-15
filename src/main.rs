@@ -53,16 +53,12 @@ async fn main() {
     let coordinates8: Vec2 = Vec2::new(65.0, 128.0);
 
     let playfield: Playfield = Playfield::new();
-    let playfield_drawer: PlayfieldDrawer = PlayfieldDrawer::new(&playfield);
+    let playfield_drawer: PlayfieldDrawer = PlayfieldDrawer::new(&playfield, black);
+
 
     loop {
         graphic_engine.draw_background(&red);
-        graphic_engine.draw_rectangle(
-            &playfield_drawer.top_left_pixel,
-            (playfield.height * PLAYFIELD_BLOCK_PX) as f32,
-            (playfield.width * PLAYFIELD_BLOCK_PX) as f32,
-            &black,
-        );
+        playfield_drawer.draw(&graphic_engine);
         graphic_engine.draw_pixel(&coordinates, &color);
         graphic_engine.draw_pixel(&coordinates2, &blue);
         graphic_engine.draw_pixel(&coordinates3, &color);
