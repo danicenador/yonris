@@ -1,4 +1,5 @@
 use crate::playfield;
+use crate::ivec2::IVec2;
 use crate::pala8::vec2::Vec2;
 use crate::pala8::display_engine::center_line;
 use crate::pala8::graphic_engine::GraphicEngine;
@@ -6,6 +7,7 @@ use crate::pala8::color::Color;
 
 use crate::constants::PLAYFIELD_BLOCK_PX;
 use crate::pala8::constants::{RESOLUTION_HEIGHT, RESOLUTION_WIDTH};
+
 
 pub struct PlayfieldDrawer<'a> {
     pub playfield: &'a playfield::Playfield,
@@ -30,6 +32,11 @@ impl<'a> PlayfieldDrawer<'a> {
     }
 
     pub fn draw(&self, graphic_engine: &GraphicEngine) {
+        self.draw_playfield_background(graphic_engine);
+        self.draw_piece(graphic_engine);
+    }
+
+    fn draw_playfield_background(&self, graphic_engine: &GraphicEngine){
         graphic_engine.draw_rectangle(
             &self.top_left_pixel,
             (self.playfield.height * PLAYFIELD_BLOCK_PX) as f32,
@@ -37,4 +44,27 @@ impl<'a> PlayfieldDrawer<'a> {
             &self.color,
         )
     }
+
+    fn draw_piece(&self, graphic_engine: &GraphicEngine) {
+        let block_px: i32 = PLAYFIELD_BLOCK_PX;
+        let playfield_top_left_pixel: Vec2 = self.top_left_pixel;
+        let piece_top_left_pixel: Vec2 = get_piece_top_left_pixel(
+            &self.playfield.piece.position,
+            block_px,
+            &playfield_top_left_pixel
+        );
+
+        graphic_engine.draw_rectangle(
+            &piece_top_left_pixel,
+            block_px as f32,
+            block_px as f32,
+            &self.playfield.piece.color,
+        );
+    }
+}
+
+fn get_piece_top_left_pixel(playfield_coordinates: &IVec2, block_px: i32, playfield_top_left_pixel: &Vec2) -> Vec2 {
+    let x: f32 = playfield_top_left_pixel.x + ((playfield_coordinates.x - 1) * block_px) as f32;
+    let y: f32 = playfield_top_left_pixel.y + ((playfield_coordinates.y - 1) * block_px) as f32;
+    Vec2::new(x, y)
 }
