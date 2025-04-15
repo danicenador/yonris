@@ -16,27 +16,27 @@ pub struct InputEngine;
 
 impl InputEngineTrait for InputEngine {
     fn o_key_pressed(&self) -> bool {
-        prelude::is_key_pressed(prelude::KeyCode::O)
+        prelude::is_key_down(prelude::KeyCode::O)
     }
 
     fn i_key_pressed(&self) -> bool {
-        prelude::is_key_pressed(prelude::KeyCode::I)
+        prelude::is_key_down(prelude::KeyCode::I)
     }
 
     fn r_key_pressed(&self) -> bool {
-        prelude::is_key_pressed(prelude::KeyCode::R)
+        prelude::is_key_down(prelude::KeyCode::R)
     }
 
     fn h_key_pressed(&self) -> bool {
-        prelude::is_key_pressed(prelude::KeyCode::H)
+        prelude::is_key_down(prelude::KeyCode::H)
     }
     fn j_key_pressed(&self) -> bool {
-        prelude::is_key_pressed(prelude::KeyCode::J)
+        prelude::is_key_down(prelude::KeyCode::J)
     }
     fn k_key_pressed(&self) -> bool {
-        prelude::is_key_pressed(prelude::KeyCode::K)
+        prelude::is_key_down(prelude::KeyCode::K)
     }
     fn l_key_pressed(&self) -> bool {
-        prelude::is_key_pressed(prelude::KeyCode::L)
+        prelude::is_key_down(prelude::KeyCode::L)
     }
 }
