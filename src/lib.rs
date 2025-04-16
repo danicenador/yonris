@@ -5,3 +5,4 @@ pub mod drawers;
 pub mod piece;
 pub mod ivec2;
 pub mod input;
+pub mod sprite_loader;

@@ -1,6 +1,8 @@
 use crate::ivec2::IVec2;
 use crate::pala8::color::Color;
 
+
+#[derive(Clone, Hash, Eq, PartialEq, Debug)]
 pub enum PieceType {
     Straigth,
     Square,
@@ -25,7 +27,7 @@ impl Piece {
             b: 80.0 / 128.0,
             a: 1.0,
         };
-        let piece_type: PieceType = PieceType::LShaped;
+        let piece_type: PieceType = PieceType::TShaped;
         Piece {
             position: IVec2::new(x, y),
             color,
