@@ -1,9 +1,20 @@
 use crate::ivec2::IVec2;
 use crate::pala8::color::Color;
 
+pub enum PieceType {
+    Straigth,
+    Square,
+    TShaped,
+    LShapedMirror,
+    LShaped,
+    Skew,
+    SkewMirror,
+}
+
 pub struct Piece {
     pub position: IVec2,
     pub color: Color,
+    pub piece_type: PieceType,
 }
 
 impl Piece {
@@ -14,9 +25,11 @@ impl Piece {
             b: 80.0 / 128.0,
             a: 1.0,
         };
+        let piece_type: PieceType = PieceType::LShaped;
         Piece {
             position: IVec2::new(x, y),
             color,
+            piece_type,
         }
     }
 

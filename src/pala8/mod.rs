@@ -5,3 +5,4 @@ pub mod draw_engine;
 pub mod graphic_engine;
 pub mod input_engine;
 pub mod vec2;
+pub mod sprite;

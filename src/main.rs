@@ -35,6 +35,7 @@ async fn main() {
 
 
     loop {
+        // process input -> update game -> render
         gameplay_input.apply_input(&mut playfield);
         graphic_engine.draw_background(&red);
         playfield_drawer.draw(&playfield, &graphic_engine);
