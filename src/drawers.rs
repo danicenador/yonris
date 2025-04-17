@@ -1,7 +1,6 @@
 use std::collections::HashMap;
 
 use crate::piece::PieceType;
-use crate::playfield::Playfield;
 use crate::ivec2::IVec2;
 use crate::pala8::vec2::Vec2;
 use crate::pala8::display_engine::center_line;
@@ -12,6 +11,8 @@ use crate::pala8::sprite::Sprite;
 use crate::constants::PLAYFIELD_BLOCK_PX;
 use crate::pala8::constants::{RESOLUTION_HEIGHT, RESOLUTION_WIDTH};
 use crate::sprite_loader;
+use crate::playfield::Playfield;
+use crate::block::Block;
 
 pub struct PlayfieldDrawer {
     pub top_left_pixel: Vec2,
@@ -38,7 +39,9 @@ impl PlayfieldDrawer {
 
     pub fn draw(&self, playfield: &Playfield, graphic_engine: &GraphicEngine) {
         self.draw_playfield_background(playfield, graphic_engine);
-        self.draw_piece(playfield, graphic_engine);
+        for block in &playfield.piece.blocks {
+            self.draw_block(block, graphic_engine);
+        }
     }
 
     fn draw_playfield_background(&self, playfield: &Playfield, graphic_engine: &GraphicEngine){
@@ -50,9 +53,9 @@ impl PlayfieldDrawer {
         )
     }
 
-    fn draw_piece(&self, playfield: &Playfield, graphic_engine: &GraphicEngine) {
-        let piece_top_left_pixel = self.calculate_piece_top_left_pixel(playfield);
-        let piece_type = &playfield.piece.piece_type;
+    fn draw_block(&self, block: &Block, graphic_engine: &GraphicEngine) {
+        let piece_top_left_pixel = self.calculate_block_top_left_pixel(&block);
+        let piece_type = &block.piece_type;
 
         match self.piece_sprites.get(piece_type) {
             Some(sprite) => {
@@ -64,10 +67,10 @@ impl PlayfieldDrawer {
         }
     }
 
-    fn calculate_piece_top_left_pixel(&self, playfield: &Playfield) -> Vec2 {
+    fn calculate_block_top_left_pixel(&self, block: &Block) -> Vec2 {
         let block_px: i32 = PLAYFIELD_BLOCK_PX;
         get_piece_top_left_pixel(
-            &playfield.piece.position,
+            &block.position,
             block_px,
             &self.top_left_pixel,
         )

@@ -1,4 +1,5 @@
 use crate::ivec2::IVec2;
+use crate::block::Block;
 
 
 #[derive(Clone, Hash, Eq, PartialEq, Debug)]
@@ -13,30 +14,21 @@ pub enum PieceType {
 }
 
 pub struct Piece {
-    pub position: IVec2,
+    pub core_position: IVec2,
+    pub blocks: Vec<Block>,
     pub piece_type: PieceType,
 }
 
 impl Piece {
-    pub fn new(x: i32, y: i32) -> Self {
-        let piece_type: PieceType = PieceType::TShaped;
+    pub fn new(core_position: IVec2, blocks: Vec<Block>, piece_type: PieceType) -> Self {
         Piece {
-            position: IVec2::new(x, y),
+            core_position,
+            blocks,
             piece_type,
         }
     }
 
-    pub fn proyection_left(&self) -> IVec2 {
-        IVec2::new(self.position.x - 1, self.position.y)
-    }
-    pub fn proyection_right(&self) -> IVec2 {
-        IVec2::new(self.position.x + 1, self.position.y)
-    }
-    pub fn proyection_down(&self) -> IVec2 {
-        IVec2::new(self.position.x, self.position.y + 1)
-    }
-
     pub fn set_position(&mut self, new_possition: IVec2) {
-        self.position = new_possition;
+        self.core_position = new_possition;
     }
 }
