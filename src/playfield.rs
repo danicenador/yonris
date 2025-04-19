@@ -98,10 +98,17 @@ impl Playfield {
     pub fn is_valid_position(&self, new_possition: &IVec2) -> bool {
         if new_possition.x <= 0 || new_possition.x > self.width {
             return false;
-        }
-        if new_possition.y <= 0 || new_possition.y > self.height {
+        } else if new_possition.y <= 0 || new_possition.y > self.height {
             return false;
+        } else {
+            for block in &self.stacked_blocks {
+                if block.position == *new_possition {
+                    return false;
+                }
+            }
         }
+
+
         true
     }
 
