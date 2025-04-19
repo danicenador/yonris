@@ -2,7 +2,7 @@ use crate::constants::{PLAYFIELD_HEIGHT, PLAYFIELD_WIDTH, INITIAL_FALL_PACE};
 use crate::piece::Piece;
 use crate::ivec2::IVec2;
 use crate::block::Block;
-use crate::piece::PieceType;
+use crate::piece_factory::PieceFactory;
 
 const STARTING_X: i32 = 6;
 const STARTING_Y: i32 = 1;
@@ -11,7 +11,10 @@ pub struct Playfield {
     pub width: i32,
     pub height: i32,
     pub piece: Piece,
-    pub fall: FallDefinition,
+    pub stacked_blocks: Vec<Block>,
+    fall: FallDefinition,
+    piece_factory: PieceFactory,
+    spawn_position: IVec2,
 }
 
 impl Playfield {
@@ -22,24 +25,18 @@ impl Playfield {
             pace: INITIAL_FALL_PACE,
             buffer: 0.0,
         };
-
-        // hardoced piece
-        let position: IVec2 = IVec2::new(STARTING_X, STARTING_Y);
-        let piece_type = PieceType::LShapedMirror;
-        let blocks: Vec<Block> = vec![
-            Block::new(position.clone(), piece_type.clone(), true),
-            Block::new(position.add(&IVec2::new(1, 0)), piece_type.clone(), false),
-            Block::new(position.add(&IVec2::new(-1, 0)), piece_type.clone(), false),
-            Block::new(position.add(&IVec2::new(1, 1)), piece_type.clone(), false),
-
-        ];
-        let piece: Piece = Piece::new(position, blocks, piece_type);
+        let piece_factory: PieceFactory = PieceFactory::new();
+        let spawn_position: IVec2 = IVec2::new(STARTING_X, STARTING_Y);
+        let stacked_blocks: Vec<Block> = vec![];
 
         Playfield {
             width,
             height,
-            piece,
+            piece: piece_factory.get(spawn_position),
             fall,
+            piece_factory,
+            spawn_position,
+            stacked_blocks,
         }
     }
 
@@ -90,22 +87,12 @@ impl Playfield {
     }
 
     pub fn move_piece_down(&mut self) {
-        let output: bool = self.move_piece(|block| block.projection_down());
+        let move_succesful: bool = self.move_piece(|block| block.projection_down());
 
-        if !output {
-            let position: IVec2 = IVec2::new(STARTING_X, STARTING_Y);
-            let piece_type = PieceType::LShapedMirror;
-            let blocks: Vec<Block> = vec![
-                Block::new(position.clone(), piece_type.clone(), true),
-                Block::new(position.add(&IVec2::new(1, 0)), piece_type.clone(), false),
-                Block::new(position.add(&IVec2::new(-1, 0)), piece_type.clone(), false),
-                Block::new(position.add(&IVec2::new(1, 1)), piece_type.clone(), false),
-
-            ];
-            self.piece = Piece::new(position, blocks, piece_type);
+        if !move_succesful {
+            self.piece_blocks_to_stacked_blocks();
+            self.new_piece();
         }
-
-
     }
 
     pub fn is_valid_position(&self, new_possition: &IVec2) -> bool {
@@ -116,6 +103,16 @@ impl Playfield {
             return false;
         }
         true
+    }
+
+    fn piece_blocks_to_stacked_blocks(&mut self) {
+        for block in &self.piece.blocks {
+            self.stacked_blocks.push(block.clone());
+        }
+    }
+
+    fn new_piece(&mut self) {
+        self.piece = self.piece_factory.get(self.spawn_position.clone());
     }
 }
 

@@ -42,6 +42,9 @@ impl PlayfieldDrawer {
         for block in &playfield.piece.blocks {
             self.draw_block(block, graphic_engine);
         }
+        for block in &playfield.stacked_blocks {
+            self.draw_block(block, graphic_engine);
+        }
     }
 
     fn draw_playfield_background(&self, playfield: &Playfield, graphic_engine: &GraphicEngine){

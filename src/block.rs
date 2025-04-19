@@ -1,6 +1,7 @@
 use crate::ivec2::IVec2;
 use crate::piece::PieceType;
 
+#[derive(Clone)]
 pub struct Block {
     pub position: IVec2,
     pub piece_type: PieceType,
