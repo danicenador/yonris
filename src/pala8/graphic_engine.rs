@@ -18,6 +18,10 @@ impl GraphicEngine {
         }
     }
 
+    pub fn get_frame_time(&self) -> f32 {
+        self.draw_engine.get_frame_time()
+    }
+
     pub fn draw_background(&self, color: &Color) {
         self.draw_engine.background_color(color);
     }
