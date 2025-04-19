@@ -1,14 +1,9 @@
-use rand::rng;
-
 use crate::ivec2::IVec2;
 use crate::block::Block;
 use crate::piece::{Piece, PieceType};
 
-const STARTING_X: i32 = 6;
-const STARTING_Y: i32 = 1;
 
 pub struct PieceFactory {
-    rng: rand::rngs::ThreadRng,
     piece_types: Vec<PieceType>,
 }
 
@@ -25,7 +20,6 @@ impl PieceFactory {
         ];
 
         PieceFactory {
-            rng: rng(),
             piece_types,
         }
     }
