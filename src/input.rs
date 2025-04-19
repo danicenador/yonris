@@ -12,7 +12,6 @@ pub struct GameplayInput{
 impl GameplayInput {
     pub fn new() -> Self {
         let input_engine: input_engine::InputEngine = input_engine::InputEngine;
-        let move_buffer: f32 = 0.0;
         Self {
             input_engine: Box::new(input_engine),
             left_movement: MovementInput::new(),
