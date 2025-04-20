@@ -1,12 +1,13 @@
 use crate::pala8::input_engine;
 
-use crate::constants::PIECE_PACE;
+use crate::constants::{PIECE_PACE, PIECE_PACE_FAST};
 use crate::playfield::Playfield;
 
 pub struct GameplayInput{
     input_engine: Box<dyn input_engine::InputEngineTrait>,
     left_movement: MovementInput,
     right_movement: MovementInput,
+    down_movement: MovementInput,
 }
 
 impl GameplayInput {
@@ -16,6 +17,13 @@ impl GameplayInput {
             input_engine: Box::new(input_engine),
             left_movement: MovementInput::new(),
             right_movement: MovementInput::new(),
+            down_movement: MovementInput::new(),
+        }
+    }
+
+    pub fn update_fall(&mut self, playfield: &mut Playfield, frame_time: f32) {
+        if !self.input_engine.j_key_pressed(){
+            playfield.update(frame_time);
         }
     }
 
@@ -24,9 +32,12 @@ impl GameplayInput {
             self.left_movement_logic(playfield, frame_time);} else {self.left_movement.reset();}
         if self.input_engine.l_key_pressed() {
             self.right_movement_logic(playfield, frame_time);} else {self.right_movement.reset();}
-
         if self.input_engine.j_key_pressed() {
-            playfield.move_piece_down();
+            self.down_movement_logic(playfield, frame_time);} else {self.down_movement.reset();}
+
+
+        if self.input_engine.space_key_pressed_once() {
+            playfield.rotate_piece();
         }
     }
 
@@ -52,6 +63,19 @@ impl GameplayInput {
             if self.right_movement.time_pressed > PIECE_PACE {
                 self.right_movement.time_pressed = 0.0;
                 playfield.move_piece_right();
+            }
+        }
+    }
+
+    fn down_movement_logic(&mut self, playfield: &mut Playfield, frame_time: f32)  {
+        if !self.down_movement.last_status {
+            playfield.move_piece_down();
+            self.down_movement.last_status = true;
+        } else {
+            self.down_movement.time_pressed += frame_time;
+            if self.down_movement.time_pressed > PIECE_PACE_FAST {
+                self.down_movement.time_pressed = 0.0;
+                playfield.move_piece_down();
             }
         }
     }

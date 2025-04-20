@@ -3,6 +3,7 @@ use crate::piece::Piece;
 use crate::ivec2::IVec2;
 use crate::block::Block;
 use crate::piece_factory::PieceFactory;
+use crate::piece::PieceType;
 
 const STARTING_X: i32 = 6;
 const STARTING_Y: i32 = 1;
@@ -45,6 +46,22 @@ impl Playfield {
         if self.fall.buffer >= self.fall.pace {
             self.move_piece_down();
             self.fall.buffer = 0.0;
+        }
+    }
+
+    pub fn rotate_piece(&mut self) {
+        if self.piece.piece_type != PieceType::Square {
+            let new_positions: Vec<IVec2> = self.piece.projection_rotation();
+            let mut valid_positions: Vec<bool> = vec![];
+
+            for possition in &new_positions {
+                let is_valid = self.is_valid_position(possition);
+                valid_positions.push(is_valid);
+            }
+
+            if valid_positions.iter().all(|&x| x) {
+                self.piece.set_block_possitions(new_positions);
+            }
         }
     }
 

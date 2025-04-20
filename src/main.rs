@@ -3,13 +3,10 @@ use macroquad::prelude;
 use yonris::pala8::color::Color;
 use yonris::pala8::display_engine::window_conf;
 use yonris::pala8::graphic_engine::GraphicEngine;
-use yonris::pala8::vec2::Vec2;
 
 use yonris::drawers::PlayfieldDrawer;
 use yonris::input::GameplayInput;
 use yonris::playfield::Playfield;
-
-use yonris::constants::PLAYFIELD_BLOCK_PX;
 
 #[macroquad::main(window_conf)]
 async fn main() {
@@ -37,7 +34,7 @@ async fn main() {
         // process input -> update game -> render
         let frame_time: f32 = graphic_engine.get_frame_time();
         gameplay_input.apply_input(&mut playfield, frame_time);
-        playfield.update(frame_time);
+        gameplay_input.update_fall(&mut playfield, frame_time);
         graphic_engine.draw_background(&red);
         playfield_drawer.draw(&playfield, &graphic_engine);
         prelude::next_frame().await

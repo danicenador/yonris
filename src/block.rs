@@ -30,4 +30,8 @@ impl Block {
     pub fn set_position(&mut self, new_possition: IVec2) {
         self.position = new_possition;
     }
+
+    pub fn get_position(&self) -> &IVec2 {
+        &self.position
+    }
 }
