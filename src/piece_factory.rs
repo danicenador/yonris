@@ -76,6 +76,6 @@ impl PieceFactory {
             ],
         };
 
-        Piece::new(spawn_position, blocks, piece_type)
+        Piece::new(blocks, piece_type)
     }
 }
