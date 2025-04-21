@@ -4,6 +4,7 @@ use crate::ivec2::IVec2;
 use crate::block::Block;
 use crate::piece_factory::PieceFactory;
 use crate::piece::PieceType;
+use crate::utils;
 
 const STARTING_X: i32 = 6;
 const STARTING_Y: i32 = 1;
@@ -108,6 +109,7 @@ impl Playfield {
 
         if !move_succesful {
             self.piece_blocks_to_stacked_blocks();
+            self.remove_full_rows();
             self.new_piece();
         }
     }
@@ -125,7 +127,6 @@ impl Playfield {
             }
         }
 
-
         true
     }
 
@@ -135,8 +136,62 @@ impl Playfield {
         }
     }
 
+    fn get_full_rows(&mut self) -> Vec<i32> {
+        let mut blocks_row: Vec<i32> = vec![];
+        for block in &self.stacked_blocks {
+            blocks_row.push(block.position.y);
+        }
+
+        let blocks_per_row = utils::count_occurrences(blocks_row);
+
+        let mut rows_to_remove: Vec<i32> = vec![];
+        for (row, count) in blocks_per_row {
+            if count >= self.width as usize {
+                rows_to_remove.push(row);
+            }
+        }
+        rows_to_remove.sort();
+        rows_to_remove
+    }
+
+    fn remove_full_rows(&mut self) {
+        let rows_to_remove: Vec<i32> = self.get_full_rows();
+
+        self.stacked_blocks.retain(|block| !rows_to_remove.contains(&block.position.y));
+
+
+        for row in &rows_to_remove {
+            for block in &mut self.stacked_blocks {
+                if block.position.y < *row {
+                    block.set_position(block.projection_down());
+                }
+            }
+        }
+    }
+
     fn new_piece(&mut self) {
-        self.piece = self.piece_factory.get(self.spawn_position.clone());
+        let new_piece: Piece =  self.piece_factory.get(self.spawn_position.clone());
+
+        let mut valid_positions: Vec<bool> = vec![];
+        for block in &new_piece.blocks {
+            let is_valid = self.is_valid_position(&block.position);
+            valid_positions.push(is_valid);
+        }
+
+        if valid_positions.iter().all(|&x| x) {
+            self.piece = new_piece;
+        } else {
+            println!("Game Over!");
+            self.reset();
+        }
+
+    }
+
+    fn reset(&mut self) {
+        self.stacked_blocks.clear();
+        self.fall.buffer = 0.0;
+        self.fall.pace = INITIAL_FALL_PACE;
+        self.new_piece();
     }
 }
 

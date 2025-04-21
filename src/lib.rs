@@ -8,3 +8,4 @@ pub mod ivec2;
 pub mod input;
 pub mod sprite_loader;
 pub mod block;
+pub mod utils;
