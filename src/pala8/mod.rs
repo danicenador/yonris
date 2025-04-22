@@ -6,3 +6,4 @@ pub mod graphic_engine;
 pub mod input_engine;
 pub mod vec2;
 pub mod sprite;
+pub mod letter_sprites;
