@@ -7,6 +7,7 @@ const SUPPORTED_LETTERS: &str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.!";
 
 pub struct LetterSprites {
     sprite_hash: HashMap<char, Sprite>,
+    letter_width: usize,
 }
 
 impl LetterSprites {
@@ -22,7 +23,7 @@ impl LetterSprites {
             sprite_hash.insert(letter, sprite);
         }
 
-        LetterSprites { sprite_hash }
+        LetterSprites { sprite_hash, letter_width: LETTER_WIDTH}
     }
 
     pub fn get_char(&self, letter: char) -> Option<&Sprite> {
@@ -33,5 +34,9 @@ impl LetterSprites {
         text.chars()
             .map(|c| self.get_char(c))
             .collect()
+    }
+
+    pub fn get_letter_width(&self) -> usize {
+        self.letter_width
     }
 }

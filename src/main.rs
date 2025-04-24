@@ -3,6 +3,7 @@ use macroquad::prelude;
 use yonris::pala8::color::Color;
 use yonris::pala8::display_engine::window_conf;
 use yonris::pala8::graphic_engine::GraphicEngine;
+use yonris::pala8::vec2::Vec2;
 
 use yonris::drawers::PlayfieldDrawer;
 use yonris::input::GameplayInput;
@@ -37,6 +38,7 @@ async fn main() {
         gameplay_input.update_fall(&mut playfield, frame_time);
         graphic_engine.draw_background(&red);
         playfield_drawer.draw(&playfield, &graphic_engine);
+        playfield_drawer.draw_text("m3l@n", &Vec2::new(1.0, 1.0), &graphic_engine);
         prelude::next_frame().await
     }
 }

@@ -1,23 +1,25 @@
 use std::collections::HashMap;
 
-use crate::piece::PieceType;
-use crate::ivec2::IVec2;
 use crate::pala8::vec2::Vec2;
 use crate::pala8::display_engine::center_line;
 use crate::pala8::graphic_engine::GraphicEngine;
 use crate::pala8::color::Color;
 use crate::pala8::sprite::Sprite;
+use crate::pala8::letter_sprites::LetterSprites;
+use crate::pala8::constants::{RESOLUTION_HEIGHT, RESOLUTION_WIDTH};
 
 use crate::constants::PLAYFIELD_BLOCK_PX;
-use crate::pala8::constants::{RESOLUTION_HEIGHT, RESOLUTION_WIDTH};
 use crate::sprite_loader;
 use crate::playfield::Playfield;
 use crate::block::Block;
+use crate::piece::PieceType;
+use crate::ivec2::IVec2;
 
 pub struct PlayfieldDrawer {
     pub top_left_pixel: Vec2,
     color: Color,
     piece_sprites: HashMap<PieceType, Sprite>,
+    letter_sprites: LetterSprites,
 }
 
 impl PlayfieldDrawer {
@@ -29,11 +31,13 @@ impl PlayfieldDrawer {
             center_line(pixel_height, RESOLUTION_HEIGHT),
         );
         let piece_sprites: HashMap<PieceType, Sprite> = sprite_loader::get_piece_sprites();
+        let letter_sprites: LetterSprites = LetterSprites::new();
 
         PlayfieldDrawer {
             top_left_pixel,
             color,
-            piece_sprites
+            piece_sprites,
+            letter_sprites,
         }
     }
 
@@ -92,6 +96,17 @@ impl PlayfieldDrawer {
                     &sprite.get_pixel(col, row),
                 );
             }
+        }
+    }
+
+    pub fn draw_text(&self, text: &str, top_left_pixel: &Vec2, graphic_engine: &GraphicEngine) {
+        let mut x_offset = 0.0;
+        for letter in text.chars() {
+            if let Some(sprite) = self.letter_sprites.get_char(letter) {
+                let letter_top_left_pixel = Vec2::new(top_left_pixel.x + x_offset, top_left_pixel.y);
+                self.draw_sprite(graphic_engine, sprite, &letter_top_left_pixel);
+            }
+            x_offset += self.letter_sprites.get_letter_width() as f32;
         }
     }
 }
