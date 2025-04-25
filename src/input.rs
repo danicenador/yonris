@@ -119,7 +119,11 @@ impl MenuInput {
         }
     }
 
-    pub fn start_game_key(&self) -> bool {
+    pub fn start_game(&self) -> bool {
         self.input_engine.enter_key_pressed_once()
+    }
+
+    pub fn pause_game(&self) -> bool {
+        self.input_engine.escape_key_pressed_once()
     }
 }

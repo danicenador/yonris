@@ -17,6 +17,7 @@ pub struct Playfield {
     fall: FallDefinition,
     piece_factory: PieceFactory,
     spawn_position: IVec2,
+    game_over: bool,
 }
 
 impl Playfield {
@@ -39,6 +40,7 @@ impl Playfield {
             piece_factory,
             spawn_position,
             stacked_blocks,
+            game_over: false,
         }
     }
 
@@ -181,17 +183,21 @@ impl Playfield {
         if valid_positions.iter().all(|&x| x) {
             self.piece = new_piece;
         } else {
-            println!("Game Over!");
-            self.reset();
+            self.game_over = true;
         }
 
     }
 
-    fn reset(&mut self) {
+    pub fn reset(&mut self) {
         self.stacked_blocks.clear();
         self.fall.buffer = 0.0;
         self.fall.pace = INITIAL_FALL_PACE;
+        self.game_over = false;
         self.new_piece();
+    }
+
+    pub fn is_game_over(&self) -> bool {
+        self.game_over
     }
 }
 

@@ -30,22 +30,35 @@ impl GameCore {
     pub fn run(&mut self, frame_time: f32) -> bool {
         match self.game_state {
             GameState::StartScreen => {
-                if self.menu_input.start_game_key() {
+                if self.menu_input.start_game() {
                     self.game_state = GameState::MainMenu;
                 }
             }
             GameState::MainMenu => {
-                if self.menu_input.start_game_key() {
+                if self.menu_input.start_game() {
+                    self.playfield.reset();
                     self.game_state = GameState::Playing;
                 }
             }
             GameState::Playing => {
-                self.gameplay_input.update_fall(&mut self.playfield, frame_time);
-                self.gameplay_input.apply_input(&mut self.playfield, frame_time);
+                if self.menu_input.pause_game() {
+                    self.game_state = GameState::Paused;
+                } else if self.playfield.is_game_over() {
+                    self.game_state = GameState::GameOver;
+                } else {
+                    self.gameplay_input.update_fall(&mut self.playfield, frame_time);
+                    self.gameplay_input.apply_input(&mut self.playfield, frame_time);
+                }
             }
             GameState::Paused => {
+                if self.menu_input.start_game() {
+                    self.game_state = GameState::Playing;
+                }
             }
             GameState::GameOver => {
+                if self.menu_input.start_game() {
+                    self.game_state = GameState::MainMenu;
+                }
             }
         }
         true
@@ -53,6 +66,10 @@ impl GameCore {
 
     pub fn get_playfield(&self) -> &Playfield {
         &self.playfield
+    }
+
+    pub fn get_game_state(&self) -> &GameState {
+        &self.game_state
     }
 
 }

@@ -12,6 +12,7 @@ pub trait InputEngineTrait {
     fn space_key_pressed(&self) -> bool;
     fn space_key_pressed_once(&self) -> bool;
     fn enter_key_pressed_once(&self) -> bool;
+    fn escape_key_pressed_once(&self) -> bool;
 }
 
 pub struct InputEngine;
@@ -49,5 +50,8 @@ impl InputEngineTrait for InputEngine {
     }
     fn enter_key_pressed_once(&self) -> bool {
         prelude::is_key_pressed(prelude::KeyCode::Enter)
+    }
+    fn escape_key_pressed_once(&self) -> bool {
+        prelude::is_key_pressed(prelude::KeyCode::Escape)
     }
 }

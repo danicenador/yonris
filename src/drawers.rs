@@ -14,6 +14,52 @@ use crate::playfield::Playfield;
 use crate::block::Block;
 use crate::piece::PieceType;
 use crate::ivec2::IVec2;
+use crate::game_core::GameCore;
+use crate::game_core::GameState;
+
+pub struct Drawer {
+    playfield_drawer: PlayfieldDrawer,
+    graphic_engine: GraphicEngine,
+}
+impl Drawer {
+    pub fn new(playfield: &Playfield, color: Color) -> Self {
+        let playfield_drawer = PlayfieldDrawer::new(playfield, color);
+        let graphic_engine = GraphicEngine::new();
+        Drawer { playfield_drawer, graphic_engine }
+    }
+
+    pub fn draw(&self, game_core: &GameCore) {
+        self.draw_background();
+        match game_core.get_game_state() {
+            GameState::StartScreen => {
+                self.playfield_drawer.draw_text("Start Screen", &Vec2::new(10.0, 40.0), &self.graphic_engine);
+            }
+            GameState::MainMenu => {
+                self.playfield_drawer.draw_text("Main Menu", &Vec2::new(20.0, 100.0), &self.graphic_engine);
+            }
+            GameState::Playing => {
+                self.playfield_drawer.draw(game_core.get_playfield(), &self.graphic_engine);
+            }
+            GameState::Paused => {
+                self.playfield_drawer.draw_text("Paused", &Vec2::new(20.0, 100.0), &self.graphic_engine);
+            }
+            GameState::GameOver => {
+                self.playfield_drawer.draw_text("Game Over", &Vec2::new(20.0, 100.0), &self.graphic_engine);
+            }
+        }
+    }
+
+    fn draw_background(&self) {
+        let red: Color = Color {
+            r: 94.0 / 128.0,
+            g: 17.0 / 128.0,
+            b: 25.0 / 128.0,
+            a: 1.0,
+        };
+        self.graphic_engine.draw_background(&red);
+    }
+}
+
 
 pub struct PlayfieldDrawer {
     pub top_left_pixel: Vec2,
