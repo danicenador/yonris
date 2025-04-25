@@ -9,3 +9,4 @@ pub mod input;
 pub mod sprite_loader;
 pub mod block;
 pub mod utils;
+pub mod game_core;

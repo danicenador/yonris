@@ -8,6 +8,7 @@ use yonris::pala8::vec2::Vec2;
 use yonris::drawers::PlayfieldDrawer;
 use yonris::input::GameplayInput;
 use yonris::playfield::Playfield;
+use yonris::game_core::GameCore;
 
 #[macroquad::main(window_conf)]
 async fn main() {
@@ -27,18 +28,16 @@ async fn main() {
         a: 1.0,
     };
 
-    let mut playfield: Playfield = Playfield::new();
-    let playfield_drawer: PlayfieldDrawer = PlayfieldDrawer::new(&playfield, black);
+    let mut core: GameCore = GameCore::new();
+    let playfield_drawer: PlayfieldDrawer = PlayfieldDrawer::new(core.get_playfield(), black);
     let mut gameplay_input: GameplayInput = GameplayInput::new();
 
     loop {
+        graphic_engine.draw_background(&red);
         // process input -> update game -> render
         let frame_time: f32 = graphic_engine.get_frame_time();
-        gameplay_input.apply_input(&mut playfield, frame_time);
-        gameplay_input.update_fall(&mut playfield, frame_time);
-        graphic_engine.draw_background(&red);
-        playfield_drawer.draw(&playfield, &graphic_engine);
-        playfield_drawer.draw_text("m3l@n", &Vec2::new(1.0, 1.0), &graphic_engine);
+        let output: bool = core.run(frame_time);
+        playfield_drawer.draw(core.get_playfield(), &graphic_engine);
         prelude::next_frame().await
     }
 }

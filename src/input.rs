@@ -105,3 +105,21 @@ impl MovementInput {
         }
     }
 }
+
+
+pub struct MenuInput {
+    input_engine: Box<dyn input_engine::InputEngineTrait>,
+}
+
+impl MenuInput {
+    pub fn new() -> Self {
+        let input_engine: input_engine::InputEngine = input_engine::InputEngine;
+        Self {
+            input_engine: Box::new(input_engine),
+        }
+    }
+
+    pub fn start_game_key(&self) -> bool {
+        self.input_engine.enter_key_pressed_once()
+    }
+}
