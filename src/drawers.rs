@@ -49,6 +49,10 @@ impl Drawer {
         }
     }
 
+    pub fn get_frame_time(&self) -> f32 {
+        self.graphic_engine.get_frame_time()
+    }
+
     fn draw_background(&self) {
         let red: Color = Color {
             r: 94.0 / 128.0,
@@ -58,6 +62,7 @@ impl Drawer {
         };
         self.graphic_engine.draw_background(&red);
     }
+
 }
 
 
